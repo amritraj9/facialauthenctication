@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .header-left img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            padding: 0;
+        }
+
+        header nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .theme-switcher {
+            background-color: #555;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        section.profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .profile-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-info img {
+            border-radius: 50%;
+            height: 100px;
+        }
+
+        .cie, .attendance {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        .attendance-warning {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .status-red {
+            color: red;
+            font-weight: bold;
+        }
+
+        .status-green {
+            color: green;
+            font-weight: bold;
+        }
+
+        .lesson-plan, .course-materials {
+            color: #007bff;
+            text-decoration: none;
+            border: 1px solid #007bff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .logout{
+            text-decoration: none;
+            color: black;
+        }
+        .span{
+            color: white;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="https://d2e9h3gjmozu47.cloudfront.net/brand.png" alt="LOGO">
+            <span>Ramaiah Institute of Technology, 560054</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Proctorship</a></li>
+                <li><a href="#">Events</a></li>
+                <li><a href="#">Time Table</a></li>
+                <li><a href="#">Exam History</a></li>
+                <li><a href="#">Course Exit Survey</a></li>
+                <li><a href="#">Grade Review</a></li>
+            </ul>
+        </nav>
+        <div class="header-right">
+            <button class="theme-switcher">Switch Theme</button>
+            <a class="logout" href="http://127.0.0.1:5000/"><span class="span">Logout</span>
+        </div>
+    </header>
+    <section class="profile">
+        <div class="profile-info">
+            <img src="https://img.freepik.com/premium-photo/male-female-profile-avatar-user-avatars-gender-icons_1020867-75336.jpg" alt="Profile Picture">
+            <h1>Welcome, {{ user_name }}!</h1>
+            <p>B.E-cse cyber security, SEM 06, SEC A</p>
+            <p>Last Updated On: 05/06/2024</p>
+        </div>
+        <div class="cie">
+            <h2>CIE</h2>
+            <canvas id="cieChart"></canvas>
+        </div>
+        <div class="attendance">
+            <h2>Attendance</h2>
+            <div class="attendance-warning">7 BELOW 85% (ECL65,ECL66,EC62,AL61,INT68,ECE634,ECE644)</div>
+            <canvas id="attendanceChart"></canvas>
+        </div>
+        <div class="course-table">
+            <h2>Course registration - CIE and attendance status</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Name</th>
+                        <th>Lesson Plan</th>
+                        <th>Course Materials</th>
+                        <th>Attendance</th>
+                        <th>CIE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ECL65</td>
+                        <td>Communication Systems Lab-II</td>
+                        <td><a href="#" class="lesson-plan">Lesson Plan</a></td>
+                        <td><a href="#" class="course-materials">Course Materials</a></td>
+                        <td class="status-red">69 →</td>
+                        <td class="status-green">→</td>
+                    </tr>
+                    <tr>
+                        <td>ECL66</td>
+                        <td>Embedded System Design Lab</td>
+                        <td><a href="#" class="lesson-plan">Lesson Plan</a></td>
+                        <td><a href="#" class="course-materials">Course Materials</a></td>
+                        <td class="status-red">80 →</td>
+                        <td class="status-green">→</td>
+                    </tr>
+                    <tr>
+                        <td>EC62</td>
+                        <td>Embedded System Design</td>
+                        <td><a href="#" class="lesson-plan">Lesson Plan</a></td>
+                        <td><a href="#" class="course-materials">Course Materials</a></td>
+                        <td class="status-red">79 →</td>
+                        <td class="status-green">→</td>
+                    </tr>
+                    <tr>
+                        <td>AL61</td>
+                        <td>Management & Entrepreneurship</td>
+                        <td><a href="#" class="lesson-plan">Lesson Plan</a></td>
+                        <td><a href="#" class="course-materials">Course Materials</a></td>
+                        <td class="status-red">79 →</td>
+                        <td class="status-green">→</td>
+                    </tr>
+                    <tr>
+                        <td>INT68</td>
+                        <td>Innovation/Societal/Entrepreneurship based Internship</td>
+                        <td><a href="#" class="lesson-plan">Lesson Plan</a></td>
+                        <td><a href="#" class="course-materials">Course Materials</a></td>
+                        <td class="status-red">0 →</td>
+                        <td class="status-green">→</td>
+                    </tr>
+                    <tr>
+                        <td>ECP67</td>
+                        <td>Mini Project</td>
+                        <td><a href="#" class="lesson-plan">Lesson Plan</a></td>
+                        <td><a href="#" class="course-materials">Course Materials</a></td>
+                        <td class="status-green">100 →</td>
+                        <td class="status-green">→</td>
+                    </tr>
+                    <tr>
+                        <td>ECE634</td>
+                        <td>Robotics</td>
+                        <td><a href="#" class="lesson-plan">Lesson Plan</a></td>
+                        <td><a href="#" class="course-materials">Course Materials</a></td>
+                        <td class="status-red">81 →</td>
+                        <td class="status-green">→</td>
+                    </tr>
+                    <tr>
+                        <td>ECE644</td>
+                        <td>ML and Deep Learning</td>
+                        <td><a href="#" class="lesson-plan">Lesson Plan</a></td>
+                        <td><a href="#" class="course-materials">Course Materials</a></td>
+                        <td class="status-red">76 →</td>
+                        <td class="status-green">→</td>
+                    </tr>
+                    <tr>
+                        <td>MAOE01</td>
+                        <td>Linear Algebra and Applications</td>
+                        <td><a href="#" class="lesson-plan">Lesson Plan</a></td>
+                        <td><a href="#" class="course-materials">Course Materials</a></td>
+                        <td class="status-green">100 →</td>
+                        <td class="status-green">→</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // CIE Chart
+            const cieCtx = document.getElementById('cieChart').getContext('2d');
+            const cieChart = new Chart(cieCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['ECL65', 'ECL66', 'EC62', 'AL61', 'INT68', 'ECE634', 'ECE644', 'MAOE01'],
+                    datasets: [{
+                        label: 'CIE',
+                        data: [15, 18, 30, 20, 25, 10, 35, 40],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Attendance Chart
+            const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+            const attendanceChart = new Chart(attendanceCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['ECL65', 'ECL66', 'EC62', 'AL61', 'INT68', 'ECE634', 'ECE644', 'MAOE01'],
+                    datasets: [{
+                        label: 'Attendance',
+                        data: [69, 80, 79, 79, 0, 100, 81, 76, 100],
+                        backgroundColor: [
+                            'rgba(200, 102, 34, 0.2)',
+                            'rgba(54, 162, 56, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 178, 255, 0.2)',
+                            'rgba(199, 159, 64, 0.2)',
+                            'rgba(214, 99, 23, 0.1)',
+                            'rgba(54, 85, 156, 0.2)',
+                            'rgba(75, 78, 205, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                }
+            });
+        });
+    </script>
+</body>
+</html>
